@@ -1,0 +1,10 @@
+#####################
+#UE4 generated files#
+#####################
+*/Intermediate
+*/Binaries
+*/Content/StarterContent
+
+*/Saved
+*_BuiltData.uasset
+*.VC.db
