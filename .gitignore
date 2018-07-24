@@ -1,11 +1,19 @@
-#####################
-#UE4 generated files#
-#####################
-*/Intermediate
+##########################
+# Unreal Generated Files #
+##########################
+*/Build
 */Binaries
-*/Content/StarterContent
-
+*/DerivedDataCache
+*/Intermediate
 */Saved
-*_BuiltData.uasset
+BuildingEscape/Content/StarterContent/Textures
+BuildingEscape/Content/StarterContent/HDRI
+
+######################
+# VS Generated Files #
+######################
 *.VC.db
-*/.vs
+*.suo
+*.VC.opendb
+*.sln
+*.ipch
