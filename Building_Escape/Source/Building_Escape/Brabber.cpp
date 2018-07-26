@@ -37,9 +37,11 @@ void UBrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	FRotator PlayerRotation;
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerLocation, OUT PlayerRotation);
 
-	UE_LOG(LogTemp, Warning, TEXT("Location: %s,\nRotation: %s"), *PlayerLocation.ToString(), *PlayerRotation.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("Location: %s,\nRotation: %s"), *PlayerLocation.ToString(), *PlayerRotation.ToString());
+	FVector LineTranceEnd = PlayerLocation + PlayerRotation.Vector() * Reach;
+	//Draw a red trance in the world to visualise
+	DrawDebugLine(GetWorld(), PlayerLocation, LineTranceEnd, FColor::Red, false, 0.f, 0.f, 10.f);
 	//Ray-cast out to reach distance
-
 	//See what we hit
 }
 
