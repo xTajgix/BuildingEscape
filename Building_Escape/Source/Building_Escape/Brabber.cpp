@@ -1,7 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Brabber.h"
+//It selects the reference
+#define OUT 
 
+#include "Brabber.h"
+#include "Engine/World.h"
 
 // Sets default values for this component's properties
 UBrabber::UBrabber()
@@ -29,6 +32,14 @@ void UBrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	// Get the player view point this tick
+	FVector PlayerLocation;
+	FRotator PlayerRotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerLocation, OUT PlayerRotation);
+
+	UE_LOG(LogTemp, Warning, TEXT("Location: %s,\nRotation: %s"), *PlayerLocation.ToString(), *PlayerRotation.ToString());
+	//Ray-cast out to reach distance
+
+	//See what we hit
 }
 
