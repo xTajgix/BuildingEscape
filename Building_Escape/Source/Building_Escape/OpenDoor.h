@@ -23,12 +23,14 @@ protected:
 
 	void OpenDoor();
 
+	void CloseDoor();
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere)
 	float OpenAngle = 90.f;
 
 	UPROPERTY(EditAnywhere)
@@ -36,4 +38,11 @@ private:
 
 	AActor* ActorThatOpens;//Remember pawn inherits from actor
 
+	AActor * Owner; // the owning door
+
+	UPROPERTY(EditAnywhere)
+		float DoorCloseDelay = 0.5f;
+
+	float LastDoorOpenTime;
+	FRotator Rotation;
 };
