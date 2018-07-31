@@ -6,6 +6,7 @@
 #include "Brabber.h"
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
+#include "Components/PrimitiveComponent.h"
 
 // Sets default values for this component's properties
 UBrabber::UBrabber()
@@ -59,10 +60,19 @@ void UBrabber::Grab()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Grab pressed"));
 	//Line trace and see if we reach any actors with physics body collision channel set
-	GetFirstPhysicsBodyInReach();
-
+	FHitResult HitResult = GetFirstPhysicsBodyInReach();
+	UPrimitiveComponent * ComponentToGrab = HitResult.GetComponent();
+	AActor * ActorHit = HitResult.GetActor();
 	///If we hit something then attach a physics handle
-	//TODO attach physics handle
+	if (ActorHit)
+	{
+		// Attach physics handle
+		PhysicsHandle->GrabComponentAtLocation(
+			ComponentToGrab, 
+			NAME_None, 
+			ComponentToGrab->GetOwner()->GetActorLocation()
+		);
+	}
 }
 
 FHitResult UBrabber::GetFirstPhysicsBodyInReach()
@@ -100,7 +110,7 @@ FHitResult UBrabber::GetFirstPhysicsBodyInReach()
 void UBrabber::Released()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Grab released"));
-	// TODO release physics handle
+	PhysicsHandle->ReleaseComponent();
 }
 
 
@@ -109,8 +119,21 @@ void UBrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	/// Get the player view point this tick
+	FVector PlayerLocation;
+	FRotator PlayerRotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerLocation, OUT PlayerRotation);
+
+	///UE_LOG(LogTemp, Warning, TEXT("Location: %s,\nRotation: %s"), *PlayerLocation.ToString(), *PlayerRotation.ToString());
+	FVector LineTranceEnd = PlayerLocation + PlayerRotation.Vector() * Reach;
+
 	//if the physics handle is attached
+	if (PhysicsHandle->GrabbedComponent)
+	{
 		//move the object that we're holding
+		PhysicsHandle->SetTargetLocation(LineTranceEnd);
+	}
+		
 }
 
 
