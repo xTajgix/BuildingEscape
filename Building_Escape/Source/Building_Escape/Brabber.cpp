@@ -4,6 +4,7 @@
 #define OUT 
 
 #include "Brabber.h"
+#include "GameFramework/Actor.h"
 #include "Engine/World.h"
 
 // Sets default values for this component's properties
@@ -32,16 +33,43 @@ void UBrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// Get the player view point this tick
+	/// Get the player view point this tick
 	FVector PlayerLocation;
 	FRotator PlayerRotation;
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerLocation, OUT PlayerRotation);
 
-	//UE_LOG(LogTemp, Warning, TEXT("Location: %s,\nRotation: %s"), *PlayerLocation.ToString(), *PlayerRotation.ToString());
+	///UE_LOG(LogTemp, Warning, TEXT("Location: %s,\nRotation: %s"), *PlayerLocation.ToString(), *PlayerRotation.ToString());
 	FVector LineTranceEnd = PlayerLocation + PlayerRotation.Vector() * Reach;
-	//Draw a red trance in the world to visualise
-	DrawDebugLine(GetWorld(), PlayerLocation, LineTranceEnd, FColor::Red, false, 0.f, 0.f, 10.f);
-	//Ray-cast out to reach distance
-	//See what we hit
+
+	///Draw a red trance in the world to visualise
+	DrawDebugLine(GetWorld(), 
+		PlayerLocation, 
+		LineTranceEnd, 
+		FColor::Red, 
+		false, 
+		0.f, 
+		0.f, 
+		10.f);
+
+	///Setup query parameters
+	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
+
+
+	///Line-trace (AKA ray-cast) out to reach distance
+	FHitResult LineTraceHit;
+	GetWorld()->LineTraceSingleByObjectType(
+		OUT LineTraceHit,
+		PlayerLocation,
+		LineTranceEnd,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+		TraceParameters
+	);
+	AActor * HitActor = LineTraceHit.GetActor();
+	if (HitActor)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Line trace hits %s"), *HitActor->GetName());
+	}
+	
+	///See what we hit
 }
 
