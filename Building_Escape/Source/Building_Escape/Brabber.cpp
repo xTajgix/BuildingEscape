@@ -23,18 +23,42 @@ void UBrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//UE_LOG(LogTemp, Warning, TEXT("Grabber reporting for duty"));
+	///UE_LOG(LogTemp, Warning, TEXT("Grabber reporting for duty"));
 	
 	///Look for attached Physics Handle
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
 	if (PhysicsHandle)
 	{
-		// Physics Handle is found
+		UE_LOG(LogTemp, Warning, TEXT("Physics Handle of %s is found"), *GetOwner()->GetName());
 	}
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("Physics Handle of %s isn't found"), *GetOwner()->GetName());
 	}
+
+	///Look for attached Input Component (only appears at run time)
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+	if (InputComponent)
+	{
+		///UE_LOG(LogTemp, Warning, TEXT("Input Component of %s is found"), *GetOwner()->GetName());
+		 
+		/// Bind the input axis
+		InputComponent->BindAction("Grab", IE_Pressed, this, &UBrabber::Grab);
+		InputComponent->BindAction("Grab", IE_Released, this, &UBrabber::Released);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Input Component of %s isn't found"), *GetOwner()->GetName());
+	}
+}
+void UBrabber::Grab() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("Grab pressed"));
+}
+
+void UBrabber::Released()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Grab released"));
 }
 
 
@@ -82,4 +106,5 @@ void UBrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	
 	///See what we hit
 }
+
 
