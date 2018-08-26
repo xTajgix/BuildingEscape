@@ -36,8 +36,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume * PressurePlate;
 
-	AActor* ActorThatOpens;//Remember pawn inherits from actor
-
 	AActor * Owner; // the owning door
 
 	UPROPERTY(EditAnywhere)
@@ -45,4 +43,6 @@ private:
 
 	float LastDoorOpenTime;
 	FRotator Rotation;
+
+	float GetTotalMassOfActorOnPlate(); // return total mass in kg
 };
