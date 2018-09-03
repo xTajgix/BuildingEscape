@@ -92,7 +92,10 @@ FHitResult UGrabber::GetFirstPhysicsBodyInReach()
 
 void UGrabber::Released()
 {
-	PhysicsHandle->ReleaseComponent();
+	if (PhysicsHandle)
+	{
+		PhysicsHandle->ReleaseComponent();
+	}
 }
 
 
